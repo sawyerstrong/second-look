@@ -54,7 +54,7 @@ cd second-look
 ./install.sh
 ```
 
-The script copies three files into `~/.claude` and touches nothing else there. If one of those files already exists and differs, it first saves the old copy with a `.bak-<date>` ending. It is safe to run again.
+The script copies four files into `~/.claude` and touches nothing else there. If one of those files already exists and differs, it first saves the old copy with a `.bak-<date>` ending. It is safe to run again.
 
 Where things end up:
 
@@ -63,6 +63,7 @@ Where things end up:
 | `CLAUDE.md` | `~/.claude/rules/second-look.md` | Rules Claude follows in every session |
 | `.claude/agents/reviewer.md` | `~/.claude/agents/` | The reviewer agent |
 | `.claude/agents/devils-advocate.md` | `~/.claude/agents/` | The devil's advocate agent |
+| `templates/analysis.md` | `~/.claude/second-look/analysis-template.md` | The write-up template Claude copies into new analyses |
 
 (`~` is your Linux home folder. It shows up as **Linux files** in the ChromeOS Files app. Folders starting with `.` are hidden there; that is expected.)
 
@@ -105,13 +106,7 @@ Three things to know:
 
 Say your folder holds `data/results.csv`, `analysis.py`, and a draft write-up `analysis.md` concluding that condition B gave a higher response than condition A.
 
-**Step 1: Draft.** Start from the write-up template:
-
-```bash
-cp ~/second-look/templates/analysis.md ~/your-take-home/analysis.md
-```
-
-Fill in its Plan section before you look at any results, then tell Claude: "Use analysis.md as the write-up structure." If the assessment specifies its own format, use that instead and fit the template's sections into it. Work through the analysis with Claude as usual. Because of the rules, expect it to list assumptions before computing, to ask you for any threshold or constant it doesn't have, and to show the code behind each number.
+**Step 1: Draft.** Start from the write-up template. When you begin an analysis in a folder with no write-up, Claude offers to copy it in as `analysis.md`; say yes. If it doesn't offer, ask: "Copy the second-look template into this folder." Fill in the Plan and Experimental methods sections with Claude before you look at any results. If the assessment specifies its own format, use that instead and fit the template's sections into it. Work through the analysis with Claude as usual. Because of the rules, expect it to list assumptions before computing, to ask you for any threshold or constant it doesn't have, and to show the code behind each number.
 
 **Step 2: Review.**
 
@@ -147,4 +142,4 @@ It returns counter-arguments labeled **Plausible** (something in your data point
 git pull && ./install.sh
 ```
 
-**Remove:** in the `second-look` folder, run `./install.sh --uninstall`. It deletes the three files it installed and nothing else.
+**Remove:** in the `second-look` folder, run `./install.sh --uninstall`. It deletes the four files it installed and nothing else.

@@ -4,7 +4,7 @@
 #   ./install.sh              install, or update an existing install
 #   ./install.sh --uninstall  remove it
 #
-# Safe to re-run. Copies three files into ~/.claude and touches nothing else.
+# Safe to re-run. Copies four files into ~/.claude and touches nothing else.
 # A file that differs from the repo copy is backed up with a timestamp first.
 
 if [ -z "${BASH_VERSION:-}" ]; then exec bash "$0" "$@"; fi
@@ -18,6 +18,7 @@ FILES=(
   ".claude/agents/reviewer.md:agents/reviewer.md"
   ".claude/agents/devils-advocate.md:agents/devils-advocate.md"
   "CLAUDE.md:rules/second-look.md"
+  "templates/analysis.md:second-look/analysis-template.md"
 )
 
 warn_legacy() {
@@ -57,6 +58,7 @@ uninstall() {
       echo "removed  $target"
     fi
   done
+  rmdir "$CLAUDE_DIR/second-look" 2>/dev/null || true
   warn_legacy
 }
 
