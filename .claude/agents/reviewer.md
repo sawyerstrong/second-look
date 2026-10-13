@@ -20,6 +20,7 @@ Use Bash to read the data and recompute numbers. Never run the analysis code in 
 ## What to look for
 
 - **Unstated assumptions.** Independence, distribution shape, units, what a column means, how samples were chosen — anything the conclusions depend on that the write-up never states.
+- **Design gaps.** Missing controls. Layout, run order, batch, date, or operator lined up with the condition being compared. A unit of replication that does not match the n used in the statistics (for example, repeat measurements of one sample counted as separate samples).
 - **Unsupported claims.** Conclusions that go beyond what this data, at this sample size, can show. Causal language from correlational data. Generalization beyond the sampled conditions.
 - **Unjustified methods.** A test, model, or transform used without saying why, or whose assumptions were not checked.
 - **Unexplained exclusions.** Outliers, rows, or samples dropped without a stated reason, a count, or a with/without comparison. Check the code for silent filters, `dropna`, and hard-coded index removals.
