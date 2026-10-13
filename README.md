@@ -7,7 +7,7 @@ Rules and two reviewer agents that make Claude Code a more skeptical analysis pa
 
 second-look contains no domain knowledge. It checks whether your analysis supports your claims, never whether your answer is the "right" one.
 
-Before you start: if your take-home has rules about AI tools, read them first. These tools review your reasoning; they do not do the analysis for you, but some employers forbid any AI use.
+When an assessment allows unlimited AI, using AI is not what sets you apart. Showing judgment about it is: which of its findings you acted on, which you overruled, and why. The review loop below is built to leave that record.
 
 ## 1. Prerequisites (10 minutes)
 
@@ -63,6 +63,8 @@ Where things end up:
 
 **Check it worked.** Run `claude` and type `/agents`. You should see `reviewer` and `devils-advocate` listed. Type `/memory` to confirm the rules file is loaded.
 
+**Do a practice run before the assessment.** Do the setup and one full pass of the review loop (Section 4) on a small practice dataset well before the real assessment. If it is timed, you don't want Linux setup or the first sign-in using up the clock, and you will learn how long one review pass takes so you can plan around it.
+
 ## 3. Using the agents
 
 Put your take-home in a folder under **Linux files** (in the Files app, drag the folder onto "Linux files"). Claude Code works only with files in the Linux environment, so a folder left in Downloads or Google Drive is invisible to it. Then start Claude Code in that folder:
@@ -113,6 +115,8 @@ It returns a numbered list, worst first. An item looks like this:
 It returns counter-arguments labeled **Plausible** (something in your data points to it) or **Possible** (nothing rules it out), and ends with the one you most need to address. For example, if all B samples were run on a later date than all A samples, it will flag run date as a confound.
 
 **Step 5: Finalize.** For each Plausible counter-argument, either rule it out with a check you actually ran or add it to your write-up as a stated limitation. Possible ones belong in a short limitations section only if a reader would reasonably raise them. Then soften any claim the evidence doesn't fully earn ("consistent with" instead of "shows").
+
+**Keep an AI log as you go.** For each reviewer or devil's-advocate item, write one line: what it flagged, whether you acted on it, and why. Include a short version in your submission, such as "AI review flagged X; I confirmed it and reran without the excluded rows" or "AI suggested confound Y; ruled out because Z." Items you overruled are as useful to show as items you accepted.
 
 ## 5. Update or remove
 
