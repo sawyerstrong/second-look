@@ -18,13 +18,14 @@ These steps are for a Chromebook. Claude Code runs inside ChromeOS's built-in Li
 
   If the option is missing or grayed out, the Chromebook is managed by a school or employer that has disabled Linux. Claude Code will not run on it; use a different computer.
 
-- **git and Python.** In Terminal:
+- **Copy and paste in Terminal** with **Ctrl+Shift+C** and **Ctrl+Shift+V**. Plain Ctrl+V does not paste there.
+- **git and Python with analysis libraries.** In Terminal:
 
   ```bash
-  sudo apt update && sudo apt install -y git python3 python3-pip python3-venv
+  sudo apt update && sudo apt install -y git python3 python3-pandas python3-scipy python3-statsmodels python3-matplotlib python3-openpyxl
   ```
 
-  If you analyze in R instead, also run `sudo apt install -y r-base`. The agents run your code to recheck numbers, so your analysis must run from this Terminal.
+  Install any further Python libraries the same way (`sudo apt install python3-<name>`); this Linux blocks plain `pip install`. If you analyze in R instead, also run `sudo apt install -y r-base`. The agents run your code to recheck numbers, so your analysis must run from this Terminal.
 
 - **Claude Code.** In Terminal:
 
@@ -32,7 +33,13 @@ These steps are for a Chromebook. Claude Code runs inside ChromeOS's built-in Li
   curl -fsSL https://claude.ai/install.sh | bash
   ```
 
-  Close Terminal and open it again, then run `claude` and follow the prompts to sign in. It opens a sign-in page in Chrome; finish there and return to Terminal. Type `/exit` to quit.
+  Close Terminal and open it again, then run `claude --version`. If it says `command not found`, run this once and try again:
+
+  ```bash
+  echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc
+  ```
+
+  Then run `claude` and follow the prompts to sign in. It opens a sign-in page in Chrome. If Terminal then asks for a code, copy it from the Chrome page and paste it into Terminal with Ctrl+Shift+V. Type `/exit` to quit.
 
 ## 2. Install (3 minutes)
 
@@ -47,30 +54,40 @@ cd second-look
 ./install.sh
 ```
 
-The script copies the two agents and adds the rules to your personal `CLAUDE.md`. If you already had one, your existing content stays; the rules go between `<!-- second-look:start -->` and `<!-- second-look:end -->` lines. Any file the script changes is first backed up with a `.bak` ending. It is safe to run again.
+The script copies three files into `~/.claude` and touches nothing else there. If one of those files already exists and differs, it first saves the old copy with a `.bak-<date>` ending. It is safe to run again.
 
 Where things end up:
 
 | File | Goes to | What it does |
 |---|---|---|
-| `CLAUDE.md` | `~/.claude/CLAUDE.md` | Rules Claude follows in every session |
+| `CLAUDE.md` | `~/.claude/rules/second-look.md` | Rules Claude follows in every session |
 | `.claude/agents/reviewer.md` | `~/.claude/agents/` | The reviewer agent |
 | `.claude/agents/devils-advocate.md` | `~/.claude/agents/` | The devil's advocate agent |
 
 (`~` is your Linux home folder. It shows up as **Linux files** in the ChromeOS Files app. Folders starting with `.` are hidden there; that is expected.)
 
-**Check it worked.** Run `claude` and type `/agents`. You should see `reviewer` and `devils-advocate` listed. Type `/memory` to confirm the rules file is loaded.
+**Check it worked.** Run `cd ~` and then `claude`.
+
+- Type `@reviewer` and look at the suggestions that pop up: `reviewer (agent)` should be one. Do the same for `@devils-advocate`. Press Esc to clear the line.
+- Type `/context` and press Enter. Under **Memory files**, `second-look.md` should be listed.
+
+If either is missing, exit with `/exit`, start `claude` again, and recheck.
 
 **Do a practice run before the assessment.** Do the setup and one full pass of the review loop (Section 4) on a small practice dataset well before the real assessment. If it is timed, you don't want Linux setup or the first sign-in using up the clock, and you will learn how long one review pass takes so you can plan around it.
 
 ## 3. Using the agents
 
-Put your take-home in a folder under **Linux files** (in the Files app, drag the folder onto "Linux files"). Claude Code works only with files in the Linux environment, so a folder left in Downloads or Google Drive is invisible to it. Then start Claude Code in that folder:
+Put your take-home in a folder under **Linux files** (in the Files app, drag the folder onto "Linux files"). Claude Code works only with files in the Linux environment, so a folder left in Downloads or Google Drive is invisible to it. Keep it out of the `second-look` folder itself. If your write-up is a Word or Google Doc, also save a copy as PDF in the folder so the agents can read it. Then start Claude Code in that folder:
 
 ```bash
 cd ~/your-take-home
 claude
 ```
+
+Two prompts appear the first time:
+
+- Claude asks whether you trust the folder. Choose yes for your own take-home folder.
+- Claude asks before it runs a command or edits a file. Read what it wants to do, then approve or decline. Declining is fine; it will explain or try another way.
 
 Ask for an agent by name in plain English:
 
@@ -94,7 +111,7 @@ Say your folder holds `data/results.csv`, `analysis.py`, and a draft write-up `a
 
 > Use the reviewer agent on analysis.md. Data: data/results.csv. Code: analysis.py.
 
-It returns a numbered list, worst first. An item looks like this:
+It returns a numbered list, worst first. An item looks like this (made-up numbers, for illustration):
 
 ```
 1. [Severity: changes conclusion]
@@ -124,6 +141,4 @@ It returns counter-arguments labeled **Plausible** (something in your data point
 git pull && ./install.sh
 ```
 
-This replaces only the section between the second-look marker lines. If you edited the rules inside that section, your edits are overwritten (the old file is saved as `CLAUDE.md.bak`). Put your own rules outside the markers instead.
-
-**Remove:** in the `second-look` folder, run `./install.sh --uninstall`. It deletes the two agents and the marked section, and leaves the rest of your `CLAUDE.md` alone.
+**Remove:** in the `second-look` folder, run `./install.sh --uninstall`. It deletes the three files it installed and nothing else.
