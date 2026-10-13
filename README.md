@@ -105,7 +105,13 @@ Three things to know:
 
 Say your folder holds `data/results.csv`, `analysis.py`, and a draft write-up `analysis.md` concluding that condition B gave a higher response than condition A.
 
-**Step 1: Draft.** Work through the analysis with Claude as usual. Because of the rules, expect it to list assumptions before computing, to ask you for any threshold or constant it doesn't have, and to show the code behind each number.
+**Step 1: Draft.** Start from the write-up template:
+
+```bash
+cp ~/second-look/templates/analysis.md ~/your-take-home/analysis.md
+```
+
+Fill in its Plan section before you look at any results, then tell Claude: "Use analysis.md as the write-up structure." If the assessment specifies its own format, use that instead and fit the template's sections into it. Work through the analysis with Claude as usual. Because of the rules, expect it to list assumptions before computing, to ask you for any threshold or constant it doesn't have, and to show the code behind each number.
 
 **Step 2: Review.**
 
