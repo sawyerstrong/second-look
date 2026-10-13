@@ -44,12 +44,10 @@ In Terminal:
 cd ~
 git clone https://github.com/sawyerstrong/second-look.git
 cd second-look
-mkdir -p ~/.claude/agents
-cp .claude/agents/*.md ~/.claude/agents/
-cat CLAUDE.md >> ~/.claude/CLAUDE.md
+./install.sh
 ```
 
-The last line **appends** the rules to your personal `CLAUDE.md`. If you already had one, your existing content stays.
+The script copies the two agents and adds the rules to your personal `CLAUDE.md`. If you already had one, your existing content stays; the rules go between `<!-- second-look:start -->` and `<!-- second-look:end -->` lines. Any file the script changes is first backed up with a `.bak` ending. It is safe to run again.
 
 Where things end up:
 
@@ -120,6 +118,12 @@ It returns counter-arguments labeled **Plausible** (something in your data point
 
 ## 5. Update or remove
 
-**Update:** run `git pull` in the `second-look` folder, then repeat the `cp` line from Section 2. For the rules, open `~/.claude/CLAUDE.md` and replace the `# Analysis rules (second-look)` section by hand; re-running the append line would add a second copy.
+**Update:** in the `second-look` folder, run:
 
-**Remove:** delete `reviewer.md` and `devils-advocate.md` from `~/.claude/agents/`, and delete the `# Analysis rules (second-look)` section from `~/.claude/CLAUDE.md`.
+```bash
+git pull && ./install.sh
+```
+
+This replaces only the section between the second-look marker lines. If you edited the rules inside that section, your edits are overwritten (the old file is saved as `CLAUDE.md.bak`). Put your own rules outside the markers instead.
+
+**Remove:** in the `second-look` folder, run `./install.sh --uninstall`. It deletes the two agents and the marked section, and leaves the rest of your `CLAUDE.md` alone.
