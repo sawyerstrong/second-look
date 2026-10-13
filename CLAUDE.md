@@ -28,4 +28,6 @@ Scale them to the request. A quick question gets a short answer plus the one cav
 
 9. **The scientist must be able to explain every number.** Anything in the final write-up must be something the scientist can explain without you. When a method, number, or claim comes from you, show how it was derived until they can explain it themselves. Prefer a simpler method they can defend over a sophisticated one they cannot.
 
+10. **The analysis must be reproducible from raw data.** Treat input files as read-only: never overwrite them, and never edit data by hand. Do all cleaning in code so every change is visible. One script (or notebook run top to bottom) must regenerate every number and figure in the write-up from the raw files; a number it cannot regenerate does not go in. Write outputs to their own folder, separate from inputs. Fix the random seed for anything random, and print the package versions at the top of the output.
+
 Confidence in the write-up must match the analysis. One dataset with no replication supports "consistent with," not "shows" or "proves."
