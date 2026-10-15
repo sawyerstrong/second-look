@@ -49,7 +49,7 @@ cd second-look
 
 The script installs whatever is missing, then sets up second-look:
 
-1. Python with common analysis libraries (pandas, scipy, statsmodels, matplotlib, openpyxl).
+1. Python with common analysis libraries (pandas, scipy, statsmodels, matplotlib, openpyxl), plus `unzip`.
 2. Claude Code itself.
 3. The second-look files listed below. If one of them already exists and differs, the old copy is saved with a `.bak-<date>` ending.
 
@@ -81,7 +81,24 @@ If either is missing, exit with `/exit`, start `claude` again, and recheck.
 
 ## 3. Using the agents
 
-Put your take-home in a folder under **Linux files** (in the Files app, drag the folder onto "Linux files"). Claude Code works only with files in the Linux environment, so a folder left in Downloads or Google Drive is invisible to it. Keep it out of the `second-look` folder itself. If your write-up is a Word or Google Doc, also save a copy as PDF in the folder so the agents can read it. Then start Claude Code in that folder:
+### Getting the take-home files in and out
+
+Claude Code works only with files in the Linux environment. A folder left in Downloads or Google Drive is invisible to it, and Claude will report that the file doesn't exist.
+
+An emailed folder arrives as a `.zip` attachment, or as a Google Drive or Dropbox link if it is large. To get it in:
+
+1. **Download it.** In Gmail, hover over the attachment and click the download arrow. For a link, open it and click **Download**. The file lands in **Downloads**.
+2. **Unzip it.** In the Files app, go to Downloads, right-click the `.zip`, and choose **Extract all**. A normal folder appears next to it.
+3. **Rename it** if the name has spaces (right-click, **Rename**, for example `take-home`). Names with spaces need quotes every time you type them in Terminal.
+4. **Move it into Linux.** Drag the folder onto **Linux files** in the Files app sidebar.
+
+Terminal alternative to steps 2–4: drag the `.zip` itself onto Linux files, then run `cd ~ && unzip take-home.zip` (use the real file name).
+
+To send results back: in the Files app, drag the folder from Linux files to Downloads, right-click it, choose **Zip selection**, and attach the zip to your reply.
+
+### Starting Claude Code
+
+Keep the take-home folder out of the `second-look` folder itself. If your write-up is a Word or Google Doc, also save a copy as PDF in the folder so the agents can read it. Then start Claude Code in that folder:
 
 ```bash
 cd ~/your-take-home

@@ -24,7 +24,7 @@ FILES=(
 )
 
 APT_PACKAGES=(
-  curl git python3 python3-pandas python3-scipy python3-statsmodels
+  curl git unzip python3 python3-pandas python3-scipy python3-statsmodels
   python3-matplotlib python3-openpyxl
 )
 
