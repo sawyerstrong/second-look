@@ -2,10 +2,12 @@
 # Install or sync second-look into your global Claude Code config.
 #
 #   ./install.sh              install, or update an existing install
-#   ./install.sh --uninstall  remove it
+#   ./install.sh --uninstall  remove it (leaves Claude Code and system packages)
 #
-# Safe to re-run. Copies four files into ~/.claude and touches nothing else.
-# A file that differs from the repo copy is backed up with a timestamp first.
+# Safe to re-run. First installs anything missing: on Debian/Ubuntu (including
+# ChromeOS Linux), the apt packages below; then Claude Code itself. Then copies
+# four files into ~/.claude and touches nothing else there. A file that differs
+# from the repo copy is backed up with a timestamp first.
 
 if [ -z "${BASH_VERSION:-}" ]; then exec bash "$0" "$@"; fi
 set -euo pipefail
@@ -21,6 +23,46 @@ FILES=(
   "templates/analysis.md:second-look/analysis-template.md"
 )
 
+APT_PACKAGES=(
+  curl git python3 python3-pandas python3-scipy python3-statsmodels
+  python3-matplotlib python3-openpyxl
+)
+
+ensure_packages() {
+  if ! command -v apt-get >/dev/null 2>&1; then
+    echo "note     no apt-get here; make sure these are installed: ${APT_PACKAGES[*]}"
+    return
+  fi
+  local missing=()
+  for pkg in "${APT_PACKAGES[@]}"; do
+    dpkg -s "$pkg" >/dev/null 2>&1 || missing+=("$pkg")
+  done
+  if [[ ${#missing[@]} -eq 0 ]]; then
+    echo "current  system packages"
+    return
+  fi
+  echo "installing system packages: ${missing[*]}"
+  sudo apt-get update
+  sudo apt-get install -y "${missing[@]}"
+}
+
+ensure_claude() {
+  local bin_dir="$HOME/.local/bin"
+  if command -v claude >/dev/null 2>&1 || [[ -x "$bin_dir/claude" ]]; then
+    echo "current  Claude Code"
+  else
+    echo "installing Claude Code"
+    curl -fsSL https://claude.ai/install.sh | bash
+  fi
+  if ! command -v claude >/dev/null 2>&1 && [[ -x "$bin_dir/claude" ]]; then
+    local line='export PATH="$HOME/.local/bin:$PATH"'
+    if ! grep -qxF "$line" "$HOME/.bashrc" 2>/dev/null; then
+      echo "$line" >> "$HOME/.bashrc"
+    fi
+    NEED_NEW_SHELL=1
+  fi
+}
+
 warn_legacy() {
   local old="$CLAUDE_DIR/CLAUDE.md"
   if [[ -f "$old" ]] && grep -qF "second-look" "$old"; then
@@ -30,6 +72,9 @@ warn_legacy() {
 }
 
 install() {
+  NEED_NEW_SHELL=0
+  ensure_packages
+  ensure_claude
   local stamp
   stamp="$(date +%Y%m%d-%H%M%S)"
   for pair in "${FILES[@]}"; do
@@ -48,6 +93,12 @@ install() {
     cp "$src" "$target"
   done
   warn_legacy
+  echo
+  if [[ "$NEED_NEW_SHELL" == 1 ]]; then
+    echo "Done. Close this Terminal and open a new one, then run: claude"
+  else
+    echo "Done. Run: claude"
+  fi
 }
 
 uninstall() {

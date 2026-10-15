@@ -19,42 +19,32 @@ These steps are for a Chromebook. Claude Code runs inside ChromeOS's built-in Li
   If the option is missing or grayed out, the Chromebook is managed by a school or employer that has disabled Linux. Claude Code will not run on it; use a different computer.
 
 - **Copy and paste in Terminal** with **Ctrl+Shift+C** and **Ctrl+Shift+V**. Plain Ctrl+V does not paste there.
-- **git and Python with analysis libraries.** In Terminal:
 
-  ```bash
-  sudo apt update && sudo apt install -y git python3 python3-pandas python3-scipy python3-statsmodels python3-matplotlib python3-openpyxl
-  ```
-
-  Install any further Python libraries the same way (`sudo apt install python3-<name>`); this Linux blocks plain `pip install`. If you analyze in R instead, also run `sudo apt install -y r-base`. The agents run your code to recheck numbers, so your analysis must run from this Terminal.
-
-- **Claude Code.** In Terminal:
-
-  ```bash
-  curl -fsSL https://claude.ai/install.sh | bash
-  ```
-
-  Close Terminal and open it again, then run `claude --version`. If it says `command not found`, run this once and try again:
-
-  ```bash
-  echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc
-  ```
-
-  Then run `claude` and follow the prompts to sign in. It opens a sign-in page in Chrome. If Terminal then asks for a code, copy it from the Chrome page and paste it into Terminal with Ctrl+Shift+V. Type `/exit` to quit.
-
-## 2. Install (3 minutes)
+## 2. Install (5 minutes)
 
 This installs second-look **globally**: the rules and agents apply to every Claude Code session in your Linux environment, in any folder. Section 5 explains how to remove it.
 
 In Terminal:
 
 ```bash
+sudo apt update && sudo apt install -y git
 cd ~
 git clone https://github.com/sawyerstrong/second-look.git
 cd second-look
 ./install.sh
 ```
 
-The script copies four files into `~/.claude` and touches nothing else there. If one of those files already exists and differs, it first saves the old copy with a `.bak-<date>` ending. It is safe to run again.
+The script installs whatever is missing, then sets up second-look:
+
+1. Python with common analysis libraries (pandas, scipy, statsmodels, matplotlib, openpyxl).
+2. Claude Code itself.
+3. The second-look files listed below. If one of them already exists and differs, the old copy is saved with a `.bak-<date>` ending.
+
+It is safe to run again; anything already installed is skipped. If it ends by telling you to open a new Terminal, close this one and open a new one.
+
+Then run `claude` and follow the prompts to sign in. It opens a sign-in page in Chrome. If Terminal then asks for a code, copy it from the Chrome page and paste it into Terminal with Ctrl+Shift+V. Type `/exit` to quit.
+
+Install any further Python libraries with `sudo apt install python3-<name>`; this Linux blocks plain `pip install`. If you analyze in R, run `sudo apt install -y r-base`. The agents run your code to recheck numbers, so your analysis must run from this Terminal.
 
 Where things end up:
 
@@ -142,4 +132,4 @@ It returns counter-arguments labeled **Plausible** (something in your data point
 git pull && ./install.sh
 ```
 
-**Remove:** in the `second-look` folder, run `./install.sh --uninstall`. It deletes the four files it installed and nothing else.
+**Remove:** in the `second-look` folder, run `./install.sh --uninstall`. It deletes the four second-look files and nothing else; Claude Code and the Python libraries stay installed.
