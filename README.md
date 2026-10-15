@@ -24,10 +24,23 @@ These steps are for a Chromebook. Claude Code runs inside ChromeOS's built-in Li
 
 This installs second-look **globally**: the rules and agents apply to every Claude Code session in your Linux environment, in any folder. Section 5 explains how to remove it.
 
-In Terminal:
+**Install git first.** git is the tool that downloads this repo. ChromeOS Linux doesn't include it. In Terminal, paste:
 
 ```bash
 sudo apt update && sudo apt install -y git
+```
+
+`sudo` runs the command as administrator; on a Chromebook it does not ask for a password. The install takes a minute and prints a lot of text. When the prompt comes back, check it worked:
+
+```bash
+git --version
+```
+
+It should print something like `git version 2.39.5`. If it says `command not found`, run the install line again and read the last few lines it prints for an error. If those mention `Could not resolve` or `Temporary failure`, the Linux environment has no internet connection. Check the Wi-Fi, or restart Linux (right-click Terminal in the shelf and choose Shut down Linux, then open Terminal again), and retry.
+
+**Then download and install second-look:**
+
+```bash
 cd ~
 git clone https://github.com/sawyerstrong/second-look.git
 cd second-look
